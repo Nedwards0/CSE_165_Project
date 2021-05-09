@@ -40,6 +40,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_Start_clicked()
 {
     //This is temporary values for testing.
+    vector<state> tempV;
+    vect = tempV;
+    qInfo() << vect.size();
 
     //api call
 
@@ -53,41 +56,45 @@ void MainWindow::on_Start_clicked()
 
 void MainWindow::on_Sort_in_order_clicked()
 {
-   int index=0;
-   vector<state> temp;
-   int size=vect.size();
-   for(int i=0;i<size;i++){
-       state lowest;//Using default constructor for MAX_Int
-       for(int j=0;j<size;j++){
-            if(vect[j].cases<lowest.cases){
-                lowest=vect[j];
-                qInfo() << "test";
-                index=j;
+   if(!(vect.size() == 0))
+   {
+       int index=0;
+       vector<state> temp;
+       int size=vect.size();
+       for(int i=0;i<size;i++){
+           state lowest;//Using default constructor for MAX_Int
+           for(int j=0;j<size;j++){
+                if(vect[j].cases<lowest.cases){
+                    lowest=vect[j];
+                    //qInfo() << "test";
+                    index=j;
+                }
             }
-        }
-        qInfo() << lowest.cases;
-        temp.push_back(lowest);
-        vect[index].cases=INT_MAX;
+            //qInfo() << lowest.cases;
+            temp.push_back(lowest);
+            vect[index].cases=INT_MAX;
 
+       }
+       vect=temp;
+       //ui->item1->setText(QString::fromStdString(temp[0].name));
+       //ui->item1->setMaximumHeight(vect[0].cases);
+       qInfo() << vect[0].cases;
    }
-   vect=temp;
-   //ui->item1->setText(QString::fromStdString(temp[0].name));
-   //ui->item1->setMaximumHeight(vect[0].cases);
-   qInfo() << vect[0].cases;
-
 }
 
 void MainWindow::on_pushButton_clicked()
 {
-    //This is sorting using sorting done above then inversing it.
-    MainWindow::on_Sort_in_order_clicked();
-    vector<state> temp;
-    int size=vect.size();
-    for(int i=size-1;i>=0;i--){
-       temp.push_back(vect[i]);
+    if(!(vect.size() == 0))
+    {
+        //This is sorting using sorting done above then inversing it.
+        MainWindow::on_Sort_in_order_clicked();
+        vector<state> temp;
+        int size=vect.size();
+        for(int i=size-1;i>=0;i--){
+           temp.push_back(vect[i]);
+        }
+        qInfo() << temp[0].cases;
     }
-    qInfo() << temp[0].cases;
-
 }
 
 
