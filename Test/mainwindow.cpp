@@ -3,7 +3,6 @@
 #include <string>
 #include <iostream>
 #include <bits/stdc++.h>
-#include <QPainter>
 #include<QDebug>
 
 using namespace std;
@@ -41,6 +40,9 @@ MainWindow::~MainWindow()
 void MainWindow::on_Start_clicked()
 {
     //This is temporary values for testing.
+
+    //api call
+
     state c("Califorina",400);//temparay testing
     vect.push_back(c);
     state c_2("as",9);
@@ -88,9 +90,4 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
-void MainWindow::on_Drawer_clicked()
-{
-    //Clear the drawing
-    //Then draw rectanges based on the height of vect[iter].cases
 
-}
