@@ -31,8 +31,6 @@ public Q_SLOTS:
     void backwardssort();
     void setLegendAlignment();
 
-    void toggleBold();
-    void toggleItalic();
     void fontSizeChanged();
 
     void updateLegendLayout();

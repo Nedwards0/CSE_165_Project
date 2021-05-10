@@ -2,6 +2,9 @@
 #include "State.h"
 #include <QtCharts/QChart>
 #include <QtCharts/QChartView>
+
+
+
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QLabel>
 #include <QtCore/QDebug>
@@ -9,27 +12,52 @@
 #include <QtCharts/QBarSeries>
 #include <QtCharts/QLegend>
 #include <QtWidgets/QFormLayout>
-#include <stdio.h>      /* printf, scanf, puts, NULL */
-#include <stdlib.h>     /* srand, rand */
-#include <time.h>       /* time */
+
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
 #include <QRandomGenerator>
 #include <string>
 #include<QDebug>
 #include <bits/stdc++.h>
 #include <iostream>
+#include <fstream>
+
+
+
+
 
 using namespace std;
 QT_CHARTS_USE_NAMESPACE
 vector<state> vect;
-int totalamount=50;
-int sorted;
+
+vector<state>removed;
+
+std::ofstream myFile("foo.csv");
+int arr[50]={
+    23486,31366,33613,49648,58623,58755,63994,68324,74575,96624,108512,110021,118857, 123233, 156406,191405,199333,221434,
+    312636, 317980, 337510,342718,367115,400417,415942, 452059,  453316, 461173, 525937, 530988,584517,606153, 666381,
+    666650,697398,733040,838061,868830,961082,988016,1007894,1083609,1085449,1177967,1358716,1495777,2070603, 2269798,2914818,2996968};
+int startup=50;
+int size=sizeof(arr);
+string s[50]={"VT","MS","HI","OK","WY","MN","ME","AK","DE","NH","ND","MT","ID","SD","WV","OR","NM","KS","NV"
+             ," AR"," CT"," IA"," UT"," WA"," KY"," MD"," LA"," CO"," AL"," SC"," MO"," NE"," WI"
+             ," VA"," MA"," IN"," TN"," AZ"," MI"," NC" ," NJ"," OH"," GA"," PA"," IL"," RI"," NY"," FL"," TX"," CA"};
+int totalcount=0;
+int sorted=1;
+int counter=0;
 //API Call
-state c("VT",23486);
 
 
 MainWidget::MainWidget(QWidget *parent) :
     QWidget(parent)
 {
+    for(int i=0;i<50;i++){
+        state c(s[i],arr[i]);
+        vect.push_back(c);
+
+    }
     // Create buttons for ui
     m_buttonLayout = new QGridLayout();
     QPushButton *detachLegendButton = new QPushButton("Toggle attached");
@@ -47,13 +75,9 @@ MainWidget::MainWidget(QWidget *parent) :
     connect(alignButton, &QPushButton::clicked, this, &MainWidget::setLegendAlignment);
     m_buttonLayout->addWidget(alignButton, 4, 0);
 
-    QPushButton *boldButton = new QPushButton("Toggle bold");
-    connect(boldButton, &QPushButton::clicked, this, &MainWidget::toggleBold);
-    m_buttonLayout->addWidget(boldButton, 8, 0);
 
-    QPushButton *italicButton = new QPushButton("Toggle italic");
-    connect(italicButton, &QPushButton::clicked, this, &MainWidget::toggleItalic);
-    m_buttonLayout->addWidget(italicButton, 9, 0);
+
+
 
 
     QPushButton *sortbutton = new QPushButton("Sort low to high");
@@ -188,24 +212,49 @@ void MainWidget::toggleAttached()
 void MainWidget::addBarset()
 {
     QList<QBarSet *> sets = m_series->barSets();
-    if (sets.count() < 50) {
+    if(startup!=0){
+        counter++;
 
-    totalamount++;
-    QBarSet *barSet = new QBarSet(QString("Califorina") + QString::number(m_series->count()));
-    qreal delta = m_series->count() +1;
 
-    *barSet << 2 + delta;//This needs to be api values
-    m_series->append(barSet);
+                QBarSet *barSet = new QBarSet(QString::fromStdString(vect[totalcount].name));
+                *barSet << vect[totalcount].cases;
+                m_series->append(barSet);
+        startup--;
+        totalcount++;
+
+
     }
+    else
+    {
+        counter++;
+        qInfo()<<"test";
+        if (sets.count() < 50) {
+            state c(removed[removed.size()-1].name,removed[removed.size()-1].cases);
+
+            QBarSet *barSet = new QBarSet(QString::fromStdString(removed[removed.size()-1].name));
+            qInfo()<<removed[removed.size()-1].cases;
+            *barSet << removed[removed.size()-1].cases;
+            m_series->append(barSet);
+            removed.pop_back();
+            vect.push_back(c);
+
+        }
+    }
+
 }
 
 void MainWidget::removeBarset()
 {
     QList<QBarSet *> sets = m_series->barSets();
     if (sets.count() > 0) {
-        totalamount--;
-
+        counter--;
+        removed.push_back(vect[vect.size()-1]);
+        vect.pop_back();
         m_series->remove(sets.at(sets.count() - 1));
+
+
+
+
     }
 }
 
@@ -237,19 +286,7 @@ void MainWidget::setLegendAlignment()
     }
 }
 
-void MainWidget::toggleBold()
-{
-    QFont font = m_chart->legend()->font();
-    font.setBold(!font.bold());
-    m_chart->legend()->setFont(font);
-}
 
-void MainWidget::toggleItalic()
-{
-    QFont font = m_chart->legend()->font();
-    font.setItalic(!font.italic());
-    m_chart->legend()->setFont(font);
-}
 
 void MainWidget::fontSizeChanged()
 {
@@ -292,14 +329,48 @@ void MainWidget::sort(){//Sort low to high.
              vect[index].cases=INT_MAX;
 
         }
+        qInfo()<<vect.size();
         vect=temp;
+
+        QList<QBarSet *> sets = m_series->barSets();
+        vector<state> holders;
+        for(int i=0;i<50;i++){
+            removeBarset();
+        }
+
+        startup=vect.size();
+        qInfo()<<"Startup:"<<startup;
+        qInfo()<<counter;
+        for(int i=0;i<=50;i++){
+            addBarset();
+
+        }
+
         //ui->item1->setText(QString::fromStdString(temp[0].name));
         //ui->item1->setMaximumHeight(vect[0].cases);
         qInfo() << vect[0].cases;
     }
 }
 void MainWidget::backwardssort(){
-    //This needs to update m_charts
+    sort();
+    vector<state> temp;
+    int size=vect.size();
+    for(int i=size-1;i>=0;i--){
+       temp.push_back(vect[i]);
+    }
+    QList<QBarSet *> sets = m_series->barSets();
+    vector<state> holders;
+    for(int i=0;i<50;i++){
+        removeBarset();
+    }
+
+    startup=vect.size();
+    qInfo()<<"Startup:"<<startup;
+    qInfo()<<counter;
+    for(int i=0;i<=50;i++){
+        addBarset();
+
+    }
 
 
 
