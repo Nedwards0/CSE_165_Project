@@ -36,24 +36,24 @@ public Q_SLOTS:
     void updateLegendLayout();
 
 private:
-    QChart *m_chart;
+    QChart *chart;
     QBarSeries *m_series;
     QChartView *c_view;
     QChart *c;
     QBarSeries c_series;
 
-    QChartView *m_chartView;
-    QGridLayout *m_mainLayout;
-    QGridLayout *m_buttonLayout;
+    QChartView *chartView;
+    QGridLayout *mainLayout;
+    QGridLayout *buttonLayout;
     QGridLayout *m_fontLayout;
 
-    QDoubleSpinBox *m_fontSize;
+    QDoubleSpinBox *fontSize;
 
     QGroupBox *m_legendSettings;
-    QDoubleSpinBox *m_legendPosX;
-    QDoubleSpinBox *m_legendPosY;
-    QDoubleSpinBox *m_legendWidth;
-    QDoubleSpinBox *m_legendHeight;
+    QDoubleSpinBox *legend_X;
+    QDoubleSpinBox *legend_Y;
+    QDoubleSpinBox *legend_Width;
+    QDoubleSpinBox *legend_Height;
 };
 
 #endif // MAINWIDGET_H

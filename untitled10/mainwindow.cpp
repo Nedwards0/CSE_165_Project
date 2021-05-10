@@ -60,21 +60,21 @@ MainWidget::MainWidget(QWidget *parent) :
 
     }
     // Create buttons for ui
-    m_buttonLayout = new QGridLayout();
+    buttonLayout = new QGridLayout();
     QPushButton *detachLegendButton = new QPushButton("Toggle attached");
     connect(detachLegendButton, &QPushButton::clicked, this, &MainWidget::toggleAttached);
-    m_buttonLayout->addWidget(detachLegendButton, 0, 0);
+    buttonLayout->addWidget(detachLegendButton, 0, 0);
 
     QPushButton *addSetButton = new QPushButton("add barset");
     connect(addSetButton, &QPushButton::clicked, this, &MainWidget::addBarset);
-    m_buttonLayout->addWidget(addSetButton, 2, 0);
+    buttonLayout->addWidget(addSetButton, 2, 0);
     QPushButton *removeBarsetButton = new QPushButton("remove barset");
     connect(removeBarsetButton, &QPushButton::clicked, this, &MainWidget::removeBarset);
-    m_buttonLayout->addWidget(removeBarsetButton, 3, 0);
+    buttonLayout->addWidget(removeBarsetButton, 3, 0);
 
     QPushButton *alignButton = new QPushButton("Align (Bottom)");
     connect(alignButton, &QPushButton::clicked, this, &MainWidget::setLegendAlignment);
-    m_buttonLayout->addWidget(alignButton, 4, 0);
+    buttonLayout->addWidget(alignButton, 4, 0);
 
 
 
@@ -83,60 +83,60 @@ MainWidget::MainWidget(QWidget *parent) :
 
     QPushButton *sortbutton = new QPushButton("Sort low to high");
     connect(sortbutton, &QPushButton::clicked, this, &MainWidget::sort);
-    m_buttonLayout->addWidget(sortbutton, 10, 0);
+    buttonLayout->addWidget(sortbutton, 10, 0);
 
     QPushButton *backwardsort = new QPushButton("Sort high to low");
     connect(backwardsort, &QPushButton::clicked, this, &MainWidget::backwardssort);
-    m_buttonLayout->addWidget(backwardsort, 11, 0);
+    buttonLayout->addWidget(backwardsort, 11, 0);
 
-    m_legendPosX = new QDoubleSpinBox();
-    m_legendPosY = new QDoubleSpinBox();
-    m_legendWidth = new QDoubleSpinBox();
-    m_legendHeight = new QDoubleSpinBox();
+    legend_X = new QDoubleSpinBox();
+    legend_Y = new QDoubleSpinBox();
+    legend_Width = new QDoubleSpinBox();
+    legend_Height = new QDoubleSpinBox();
 
-    connect(m_legendPosX,
+    connect(legend_X,
             static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
             this, &MainWidget::updateLegendLayout);
-    connect(m_legendPosY,
+    connect(legend_Y,
             static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
             this, &MainWidget::updateLegendLayout);
-    connect(m_legendWidth,
+    connect(legend_Width,
             static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
             this, &MainWidget::updateLegendLayout);
-    connect(m_legendHeight,
+    connect(legend_Height,
             static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
             this, &MainWidget::updateLegendLayout);
 
     QFormLayout *legendLayout = new QFormLayout();
-    legendLayout->addRow("HPos", m_legendPosX);
-    legendLayout->addRow("VPos", m_legendPosY);
-    legendLayout->addRow("Width", m_legendWidth);
-    legendLayout->addRow("Height", m_legendHeight);
+    legendLayout->addRow("Legend_X", legend_X);
+    legendLayout->addRow("Legend_Y", legend_Y);
+    legendLayout->addRow("Width", legend_Width);
+    legendLayout->addRow("Height", legend_Height);
     m_legendSettings = new QGroupBox("Detached legend");
     m_legendSettings->setLayout(legendLayout);
-    m_buttonLayout->addWidget(m_legendSettings);
+    buttonLayout->addWidget(m_legendSettings);
     m_legendSettings->setVisible(false);
 
     // Create chart view with the chart
-    m_chart = new QChart();
-    m_chartView = new QChartView(m_chart, this);
+    chart = new QChart();
+    chartView = new QChartView(chart, this);
 
     // Create spinbox to modify font size
-    m_fontSize = new QDoubleSpinBox();
-    m_fontSize->setValue(m_chart->legend()->font().pointSizeF());
-    connect(m_fontSize,
+    fontSize = new QDoubleSpinBox();
+    fontSize->setValue(chart->legend()->font().pointSizeF());
+    connect(fontSize,
             static_cast<void (QDoubleSpinBox::*)(double)>(&QDoubleSpinBox::valueChanged),
             this, &MainWidget::fontSizeChanged);
 
     QFormLayout *fontLayout = new QFormLayout();
-    fontLayout->addRow("Legend font size", m_fontSize);
+    fontLayout->addRow("Legend font size", fontSize);
 
     // Create layout for grid and detached legend
-    m_mainLayout = new QGridLayout();
-    m_mainLayout->addLayout(m_buttonLayout, 0, 0);
-    m_mainLayout->addLayout(fontLayout, 1, 0);
-    m_mainLayout->addWidget(m_chartView, 0, 1, 4, 1);
-    setLayout(m_mainLayout);
+    mainLayout = new QGridLayout();
+    mainLayout->addLayout(buttonLayout, 0, 0);
+    mainLayout->addLayout(fontLayout, 1, 0);
+    mainLayout->addWidget(chartView, 0, 1, 4, 1);
+    setLayout(mainLayout);
 
     createSeries();
 }
@@ -149,37 +149,37 @@ void MainWidget::createSeries()
 
 
     }
-    m_chart->addSeries(m_series);
-    m_chart->setTitle("Covid Cases Per state");
-    m_chart->createDefaultAxes();
+    chart->addSeries(m_series);
+    chart->setTitle("Covid Cases Per state");
+    chart->createDefaultAxes();
 //![1]
-    m_chart->legend()->setVisible(true);
-    m_chart->legend()->setAlignment(Qt::AlignBottom);
+    chart->legend()->setVisible(true);
+    chart->legend()->setAlignment(Qt::AlignBottom);
 //![1]
 
-    m_chartView->setRenderHint(QPainter::Antialiasing);
+    chartView->setRenderHint(QPainter::Antialiasing);
 }
 
 void MainWidget::showLegendSpinbox()
 {
     m_legendSettings->setVisible(true);
-    QRectF chartViewRect = m_chartView->rect();
+    QRectF chartViewRect = chartView->rect();
 
-    m_legendPosX->setMinimum(0);
-    m_legendPosX->setMaximum(chartViewRect.width());
-    m_legendPosX->setValue(150);
+    legend_X->setMinimum(0);
+    legend_X->setMaximum(chartViewRect.width());
+    legend_X->setValue(150);
 
-    m_legendPosY->setMinimum(0);
-    m_legendPosY->setMaximum(chartViewRect.height());
-    m_legendPosY->setValue(150);
+    legend_Y->setMinimum(0);
+    legend_Y->setMaximum(chartViewRect.height());
+    legend_Y->setValue(150);
 
-    m_legendWidth->setMinimum(0);
-    m_legendWidth->setMaximum(chartViewRect.width());
-    m_legendWidth->setValue(150);
+    legend_Width->setMinimum(0);
+    legend_Width->setMaximum(chartViewRect.width());
+    legend_Width->setValue(150);
 
-    m_legendHeight->setMinimum(0);
-    m_legendHeight->setMaximum(chartViewRect.height());
-    m_legendHeight->setValue(75);
+    legend_Height->setMinimum(0);
+    legend_Height->setMaximum(chartViewRect.height());
+    legend_Height->setValue(75);
 }
 
 void MainWidget::hideLegendSpinbox()
@@ -190,13 +190,13 @@ void MainWidget::hideLegendSpinbox()
 
 void MainWidget::toggleAttached()
 {
-    QLegend *legend = m_chart->legend();
+    QLegend *legend = chart->legend();
     if (legend->isAttachedToChart()) {
         //![2]
         legend->detachFromChart();
-        m_chart->legend()->setBackgroundVisible(true);
-        m_chart->legend()->setBrush(QBrush(QColor(128, 128, 128, 128)));
-        m_chart->legend()->setPen(QPen(QColor(192, 192, 192, 192)));
+        chart->legend()->setBackgroundVisible(true);
+        chart->legend()->setBrush(QBrush(QColor(120, 120, 120, 120)));
+        chart->legend()->setPen(QPen(QColor(200, 200, 200, 200)));
         //![2]
         showLegendSpinbox();
         updateLegendLayout();
@@ -261,26 +261,26 @@ void MainWidget::setLegendAlignment()
 {
     QPushButton *button = qobject_cast<QPushButton *>(sender());
 
-    switch (m_chart->legend()->alignment()) {
+    switch (chart->legend()->alignment()) {
     case Qt::AlignTop:
-        m_chart->legend()->setAlignment(Qt::AlignLeft);
+        chart->legend()->setAlignment(Qt::AlignLeft);
         if (button)
             button->setText("Align (Left)");
         break;
     case Qt::AlignLeft:
-        m_chart->legend()->setAlignment(Qt::AlignBottom);
+        chart->legend()->setAlignment(Qt::AlignBottom);
         if (button)
             button->setText("Align (Bottom)");
         break;
     case Qt::AlignBottom:
-        m_chart->legend()->setAlignment(Qt::AlignRight);
+        chart->legend()->setAlignment(Qt::AlignRight);
         if (button)
             button->setText("Align (Right)");
         break;
     default:
         if (button)
             button->setText("Align (Top)");
-        m_chart->legend()->setAlignment(Qt::AlignTop);
+        chart->legend()->setAlignment(Qt::AlignTop);
         break;
     }
 }
@@ -289,25 +289,25 @@ void MainWidget::setLegendAlignment()
 
 void MainWidget::fontSizeChanged()
 {
-    QFont font = m_chart->legend()->font();
-    font.setPointSizeF(m_fontSize->value());
-    m_chart->legend()->setFont(font);
+    QFont font = chart->legend()->font();
+    font.setPointSizeF(fontSize->value());
+    chart->legend()->setFont(font);
 }
 
 void MainWidget::updateLegendLayout()
 {
 //![4]
 //!
-    m_chart->legend()->setGeometry(QRectF(m_legendPosX->value(),
-                                          m_legendPosY->value(),
-                                          m_legendWidth->value(),
-                                          m_legendHeight->value()));
+    chart->legend()->setGeometry(QRectF(legend_X->value(),
+                                          legend_Y->value(),
+                                          legend_Width->value(),
+                                          legend_Height->value()));
 //![4]
 }
 void MainWidget::sort(){//Sort low to high.
     c = new QChart();
     c_view = new QChartView(c, this);
-    //This needs to update m_charts
+    //This needs to update charts
 
     if((vect.size() != 0))
     {
