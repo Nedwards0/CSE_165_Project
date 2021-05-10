@@ -344,33 +344,34 @@ void MainWidget::sort(){//Sort low to high.
     }
 }
 void MainWidget::backwardssort(){
-    for(int k=0;k<2-logic;k++){
 
-
-        qInfo()<<"size"<<vect.size();
-
-        if((vect.size() != 0))
-        {
-            //This is sorting using sorting done above then inversing it.
-            sort();
-            vector<state> temp;
-            vector<state>temp2=removed;
-            int size=vect.size();
-            for(int i=size-1;i>=0;i--){
-               temp.push_back(removed[i]);
-            }
-            int c=vect.size();
-            for(int i=0;i<c;i++){
-                removeBarset();
-            }
-            removed=temp;
-
-            for(int i=0;i<c;i++){
-                addBarset();
-            }
-            removed=temp;
+    if((vect.size() != 0))
+    {
+        int index=0;
+        vector<state> temp;
+        int size=vect.size();
+        for(int i=0;i<size;i++){
+            state highest("name",-500);//Using default constructor for MAX_Int
+            for(int j=0;j<size;j++){
+                 if(vect[j].cases>highest.cases){
+                     highest=vect[j];
+                     index=j;
+                 }
+             }
+             temp.push_back(highest);
+             vect[index].cases=-60;
 
         }
-    }
-    logic=0;
+        vect=temp;
+        int c=vect.size();
+        for(int i=0;i<c;i++){
+            removeBarset();
+        }
+        for(int i=0;i<c;i++){
+            addBarset();
+        }
+
+
+     }
+
 }
