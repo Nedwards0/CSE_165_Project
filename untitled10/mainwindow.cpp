@@ -36,14 +36,14 @@ vector<state>removed;
 
 std::ofstream myFile("foo.csv");
 int arr[50]={
-    23486,31366,33613,49648,58623,58755,63994,68324,74575,96624,108512,110021,118857, 123233, 156406,191405,199333,221434,
+    2996968,31366,33613,49648,58623,58755,63994,68324,74575,96624,108512,110021,118857, 123233, 156406,191405,199333,221434,
     312636, 317980, 337510,342718,367115,400417,415942, 452059,  453316, 461173, 525937, 530988,584517,606153, 666381,
-    666650,697398,733040,838061,868830,961082,988016,1007894,1083609,1085449,1177967,1358716,1495777,2070603, 2269798,2914818,2996968};
+    666650,697398,733040,838061,868830,961082,988016,1007894,1083609,1085449,1177967,1358716,1495777,2070603, 2269798,2914818,23486};
 int startup=50;
 int size=sizeof(arr);
-string s[50]={"VT","MS","HI","OK","WY","MN","ME","AK","DE","NH","ND","MT","ID","SD","WV","OR","NM","KS","NV"
+string s[50]={"CA","MS","HI","OK","WY","MN","ME","AK","DE","NH","ND","MT","ID","SD","WV","OR","NM","KS","NV"
              ," AR"," CT"," IA"," UT"," WA"," KY"," MD"," LA"," CO"," AL"," SC"," MO"," NE"," WI"
-             ," VA"," MA"," IN"," TN"," AZ"," MI"," NC" ," NJ"," OH"," GA"," PA"," IL"," RI"," NY"," FL"," TX"," CA"};
+             ," VA"," MA"," IN"," TN"," AZ"," MI"," NC" ," NJ"," OH"," GA"," PA"," IL"," RI"," NY"," FL"," TX"," VT"};
 int totalcount=0;
 int sorted=1;
 int counter=0;
@@ -227,12 +227,10 @@ void MainWidget::addBarset()
     else
     {
         counter++;
-        qInfo()<<"test";
         if (sets.count() < 50) {
             state c(removed[removed.size()-1].name,removed[removed.size()-1].cases);
 
             QBarSet *barSet = new QBarSet(QString::fromStdString(removed[removed.size()-1].name));
-            qInfo()<<removed[removed.size()-1].cases;
             *barSet << removed[removed.size()-1].cases;
             m_series->append(barSet);
             removed.pop_back();
@@ -309,7 +307,6 @@ void MainWidget::sort(){//Sort low to high.
     c = new QChart();
     c_view = new QChartView(c, this);
     //This needs to update m_charts
-    qInfo() << vect.size();
 
     if((vect.size() != 0))
     {
@@ -321,11 +318,9 @@ void MainWidget::sort(){//Sort low to high.
             for(int j=0;j<size;j++){
                  if(vect[j].cases<lowest.cases){
                      lowest=vect[j];
-                     //qInfo() << "test";
                      index=j;
                  }
              }
-             //qInfo() << lowest.cases;
              temp.push_back(lowest);
              vect[index].cases=INT_MAX;
 
@@ -339,7 +334,6 @@ void MainWidget::sort(){//Sort low to high.
             addBarset();
         }
 
-        qInfo()<<"size"<<c;
 
 
         //ui->item1->setText(QString::fromStdString(temp[0].name));
@@ -349,6 +343,8 @@ void MainWidget::sort(){//Sort low to high.
     }
 }
 void MainWidget::backwardssort(){
+    qInfo()<<"size"<<vect.size();
+
     if((vect.size() != 0))
     {
         //This is sorting using sorting done above then inversing it.
@@ -365,10 +361,10 @@ void MainWidget::backwardssort(){
         }
         removed=temp;
 
-        qInfo()<<removed.size();
         for(int i=0;i<c;i++){
             addBarset();
         }
+        removed=temp;
 
     }
 
