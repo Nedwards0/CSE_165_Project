@@ -22,9 +22,9 @@ using namespace std;
 QT_CHARTS_USE_NAMESPACE
 vector<state> vect;
 int totalamount=50;
-
+int sorted;
 //API Call
-
+state c("VT",23486);
 
 
 MainWidget::MainWidget(QWidget *parent) :
@@ -187,12 +187,16 @@ void MainWidget::toggleAttached()
 
 void MainWidget::addBarset()
 {
+    QList<QBarSet *> sets = m_series->barSets();
+    if (sets.count() < 50) {
+
     totalamount++;
     QBarSet *barSet = new QBarSet(QString("Califorina") + QString::number(m_series->count()));
     qreal delta = m_series->count() +1;
 
     *barSet << 2 + delta;//This needs to be api values
     m_series->append(barSet);
+    }
 }
 
 void MainWidget::removeBarset()

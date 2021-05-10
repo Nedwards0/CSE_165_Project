@@ -42,6 +42,7 @@ private:
     QBarSeries *m_series;
     QChartView *c_view;
     QChart *c;
+    QBarSeries c_series;
 
     QChartView *m_chartView;
     QGridLayout *m_mainLayout;
@@ -50,7 +51,6 @@ private:
 
     QDoubleSpinBox *m_fontSize;
 
-    // For detached layout
     QGroupBox *m_legendSettings;
     QDoubleSpinBox *m_legendPosX;
     QDoubleSpinBox *m_legendPosY;
