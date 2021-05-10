@@ -40,6 +40,8 @@ public Q_SLOTS:
 private:
     QChart *m_chart;
     QBarSeries *m_series;
+    QChartView *c_view;
+    QChart *c;
 
     QChartView *m_chartView;
     QGridLayout *m_mainLayout;

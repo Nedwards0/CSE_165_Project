@@ -21,6 +21,7 @@
 using namespace std;
 QT_CHARTS_USE_NAMESPACE
 vector<state> vect;
+int totalamount=50;
 
 //API Call
 
@@ -60,7 +61,7 @@ MainWidget::MainWidget(QWidget *parent) :
     m_buttonLayout->addWidget(sortbutton, 10, 0);
 
     QPushButton *backwardsort = new QPushButton("Sort high to low");
-    connect(backwardsort, &QPushButton::clicked, this, &MainWidget::sort);
+    connect(backwardsort, &QPushButton::clicked, this, &MainWidget::backwardssort);
     m_buttonLayout->addWidget(backwardsort, 11, 0);
 
     m_legendPosX = new QDoubleSpinBox();
@@ -124,7 +125,7 @@ void MainWidget::createSeries()
 
     }
     m_chart->addSeries(m_series);
-    m_chart->setTitle("Legend detach example");
+    m_chart->setTitle("Covid Cases Per state");
     m_chart->createDefaultAxes();
 //![1]
     m_chart->legend()->setVisible(true);
@@ -186,6 +187,7 @@ void MainWidget::toggleAttached()
 
 void MainWidget::addBarset()
 {
+    totalamount++;
     QBarSet *barSet = new QBarSet(QString("Califorina") + QString::number(m_series->count()));
     qreal delta = m_series->count() +1;
 
@@ -197,6 +199,8 @@ void MainWidget::removeBarset()
 {
     QList<QBarSet *> sets = m_series->barSets();
     if (sets.count() > 0) {
+        totalamount--;
+
         m_series->remove(sets.at(sets.count() - 1));
     }
 }
@@ -261,7 +265,8 @@ void MainWidget::updateLegendLayout()
 //![4]
 }
 void MainWidget::sort(){//Sort low to high.
-
+    c = new QChart();
+    c_view = new QChartView(c, this);
     //This needs to update m_charts
 
     if(!(vect.size() == 0))
@@ -291,5 +296,7 @@ void MainWidget::sort(){//Sort low to high.
 }
 void MainWidget::backwardssort(){
     //This needs to update m_charts
+
+
 
 }
