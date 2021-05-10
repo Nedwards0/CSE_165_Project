@@ -309,8 +309,9 @@ void MainWidget::sort(){//Sort low to high.
     c = new QChart();
     c_view = new QChartView(c, this);
     //This needs to update m_charts
+    qInfo() << vect.size();
 
-    if(!(vect.size() == 0))
+    if((vect.size() != 0))
     {
         int index=0;
         vector<state> temp;
@@ -329,46 +330,45 @@ void MainWidget::sort(){//Sort low to high.
              vect[index].cases=INT_MAX;
 
         }
-        qInfo()<<vect.size();
         vect=temp;
-
-        QList<QBarSet *> sets = m_series->barSets();
-        vector<state> holders;
-        for(int i=0;i<50;i++){
+        int c=vect.size();
+        for(int i=0;i<c;i++){
             removeBarset();
         }
-
-        startup=vect.size();
-        qInfo()<<"Startup:"<<startup;
-        qInfo()<<counter;
-        for(int i=0;i<=50;i++){
+        for(int i=0;i<c;i++){
             addBarset();
-
         }
+
+        qInfo()<<"size"<<c;
+
 
         //ui->item1->setText(QString::fromStdString(temp[0].name));
         //ui->item1->setMaximumHeight(vect[0].cases);
-        qInfo() << vect[0].cases;
+
+
     }
 }
 void MainWidget::backwardssort(){
-    sort();
-    vector<state> temp;
-    int size=vect.size();
-    for(int i=size-1;i>=0;i--){
-       temp.push_back(vect[i]);
-    }
-    QList<QBarSet *> sets = m_series->barSets();
-    vector<state> holders;
-    for(int i=0;i<50;i++){
-        removeBarset();
-    }
+    if((vect.size() != 0))
+    {
+        //This is sorting using sorting done above then inversing it.
+        sort();
+        vector<state> temp;
+        vector<state>temp2=removed;
+        int size=vect.size();
+        for(int i=size-1;i>=0;i--){
+           temp.push_back(removed[i]);
+        }
+        int c=vect.size();
+        for(int i=0;i<c;i++){
+            removeBarset();
+        }
+        removed=temp;
 
-    startup=vect.size();
-    qInfo()<<"Startup:"<<startup;
-    qInfo()<<counter;
-    for(int i=0;i<=50;i++){
-        addBarset();
+        qInfo()<<removed.size();
+        for(int i=0;i<c;i++){
+            addBarset();
+        }
 
     }
 
