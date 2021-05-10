@@ -24,6 +24,7 @@
 #include <iostream>
 #include <fstream>
 
+int logic=1;
 
 
 
@@ -343,31 +344,33 @@ void MainWidget::sort(){//Sort low to high.
     }
 }
 void MainWidget::backwardssort(){
-    qInfo()<<"size"<<vect.size();
+    for(int k=0;k<2-logic;k++){
 
-    if((vect.size() != 0))
-    {
-        //This is sorting using sorting done above then inversing it.
-        sort();
-        vector<state> temp;
-        vector<state>temp2=removed;
-        int size=vect.size();
-        for(int i=size-1;i>=0;i--){
-           temp.push_back(removed[i]);
-        }
-        int c=vect.size();
-        for(int i=0;i<c;i++){
-            removeBarset();
-        }
-        removed=temp;
 
-        for(int i=0;i<c;i++){
-            addBarset();
-        }
-        removed=temp;
+        qInfo()<<"size"<<vect.size();
 
+        if((vect.size() != 0))
+        {
+            //This is sorting using sorting done above then inversing it.
+            sort();
+            vector<state> temp;
+            vector<state>temp2=removed;
+            int size=vect.size();
+            for(int i=size-1;i>=0;i--){
+               temp.push_back(removed[i]);
+            }
+            int c=vect.size();
+            for(int i=0;i<c;i++){
+                removeBarset();
+            }
+            removed=temp;
+
+            for(int i=0;i<c;i++){
+                addBarset();
+            }
+            removed=temp;
+
+        }
     }
-
-
-
+    logic=0;
 }
