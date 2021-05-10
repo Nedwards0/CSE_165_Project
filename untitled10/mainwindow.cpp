@@ -22,7 +22,7 @@ using namespace std;
 QT_CHARTS_USE_NAMESPACE
 vector<state> vect;
 
-
+//API Call
 
 
 
@@ -186,10 +186,10 @@ void MainWidget::toggleAttached()
 
 void MainWidget::addBarset()
 {
-    QBarSet *barSet = new QBarSet(QString("set ") + QString::number(m_series->count()));
+    QBarSet *barSet = new QBarSet(QString("Califorina") + QString::number(m_series->count()));
     qreal delta = m_series->count() +1;
 
-    *barSet << 2 + delta;
+    *barSet << 2 + delta;//This needs to be api values
     m_series->append(barSet);
 }
 
@@ -261,6 +261,9 @@ void MainWidget::updateLegendLayout()
 //![4]
 }
 void MainWidget::sort(){//Sort low to high.
+
+    //This needs to update m_charts
+
     if(!(vect.size() == 0))
     {
         int index=0;
@@ -287,5 +290,6 @@ void MainWidget::sort(){//Sort low to high.
     }
 }
 void MainWidget::backwardssort(){
+    //This needs to update m_charts
 
 }
